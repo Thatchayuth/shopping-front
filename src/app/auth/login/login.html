@@ -6,30 +6,44 @@
       <input [(ngModel)]="email" type="email" class="form-control" placeholder="Email">
     </div>
 
-     <div class="mb-3 position-relative">
-      <input
-        [(ngModel)]="password"
-        [type]="showPassword ? 'text' : 'password'"
-        class="form-control"
-        placeholder="Password"
-      
-      >
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-1 me-1"
-        (click)="showPassword = !showPassword"
-      >
+    <div class="mb-3 position-relative">
+      <input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" class="form-control"
+        placeholder="Password">
+      <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-1 me-1"
+        (click)="showPassword = !showPassword">
         <i class="fa-solid " [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
       </button>
     </div>
 
-    <button (click)="login()" class="btn btn-primary w-100 mb-3">  <i class="fas fa-sign-in-alt me-2"></i>Login</button>
+    <button (click)="login()" class="btn btn-primary w-100 mb-3"> <i class="fas fa-sign-in-alt me-2"></i>Login</button>
+    <div class="text-center">
+      <button (click)="loginWithGoogle()" class="btn btn-danger w-100 mb-3">
+        <i class="fab fa-google me-2"></i>Login with Google
+      </button>
+    </div>
+
+     <div class="container mt-5">
+      <h2>Login with Google</h2>
+      <div id="g_id_onload"
+           data-client_id="304753457158-e6gg6gn4c5kua773fihgm4ad7a8v256v.apps.googleusercontent.com"
+           data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin" data-type="standard"></div>
+
+      <div *ngIf="user">
+        <h3>Welcome {{ user.name }}</h3>
+        <p>Email: {{ user.email }}</p>
+        <img [src]="user.picture" alt="Photo">
+      </div>
+    </div>
 
     <div class="text-center">
       <small>
-        Don't have an account? 
-        <a [routerLink]="['/register']" >Register</a>
+        Don't have an account?
+        <a [routerLink]="['/register']">Register</a>
       </small>
     </div>
   </div>
 </div>
+
+

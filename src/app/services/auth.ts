@@ -18,8 +18,12 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, { email, password });
   }
 
-  test()
-  {
+  loginWithGoogle(googleUser: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/googleLogin`,
+      { email: googleUser.email, name: googleUser.name, sub: googleUser.id, picture: googleUser.photoUrl });
+  }
+
+  test() {
     return this.http.get('http://localhost:3000/auth');
   }
 

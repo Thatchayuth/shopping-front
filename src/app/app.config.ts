@@ -1,18 +1,31 @@
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
+import {
+  GoogleLoginProvider,
+  SocialLoginModule,
+  SocialAuthServiceConfig
+} from '@abacritt/angularx-social-login';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-
     importProvidersFrom(FormsModule),
-  ]
+    importProvidersFrom(
+      SocialLoginModule.initialize({
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('304753457158-e6gg6gn4c5kua773fihgm4ad7a8v256v.apps.googleusercontent.com'),
+          },
+        ],
+      })
+    )
+  ],
 };
