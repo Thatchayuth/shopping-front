@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+    <h2 class="text-center mb-4 text-danger">Register</h2>
+
+    <div class="mb-3">
+      <input [(ngModel)]="email" type="email" class="form-control" placeholder="Email">
+    </div>
+
+    <div class="mb-3 position-relative">
+      <input
+        [(ngModel)]="password"
+        [type]="showPassword ? 'text' : 'password'"
+        class="form-control"
+        placeholder="Password"
+        (input)="checkPassword()"
+      >
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-1 me-1"
+        (click)="showPassword = !showPassword"
+      >
+        <i class="fa-solid " [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+      </button>
+    </div>
+
+     <div class="mb-3 position-relative">
+        <input
+          [(ngModel)]="confirmPassword"
+          [type]="showPassword ? 'text' : 'password'"
+          class="form-control"
+          placeholder="Confirm Password">
+     </div>
+
+    <!-- Password Validation -->
+    <ul class="mb-3 small">
+      <li [class.text-success]="passwordValidation.upper" [class.text-danger]="!passwordValidation.upper">Uppercase letter (A-Z)</li>
+      <li [class.text-success]="passwordValidation.lower" [class.text-danger]="!passwordValidation.lower">Lowercase letter (a-z)</li>
+      <li [class.text-success]="passwordValidation.number" [class.text-danger]="!passwordValidation.number">Number (0-9)</li>
+      <li [class.text-success]="passwordValidation.special" [class.text-danger]="!passwordValidation.special">Special character (!@#$%^&*)</li>
+      <li [class.text-success]="passwordValidation.length" [class.text-danger]="!passwordValidation.length">At least 6 characters</li>
+    </ul>
+
+    <button (click)="register()" class="btn btn-danger w-100 mb-3"><i class="fas fa-user-plus me-2"></i>Register</button>
+
+    <div class="text-center">
+      <small>
+        Already have an account? 
+        <a routerLink="/login">Login</a>
+      </small>
+    </div>
+  </div>
+</div>
