@@ -4,6 +4,14 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+export  interface User {
+  email: string;
+  password: string;
+  Username: string;
+  LastName: string;
+  Address: string;
+  Phone: string;
+}
 @Component({
   selector: 'app-register',
   imports: [CommonModule,FormsModule,RouterModule],
@@ -11,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './register.scss'
 })
 export class Register {
- email = '';
+  email = '';
   password = '';
   confirmPassword = '';
   showPassword = false;
@@ -22,6 +30,15 @@ export class Register {
     number: false,
     special: false,
     length: false
+  };
+
+  UsersRegistered : User = {
+    email: '',
+    password: '',
+    Username: '',
+    LastName: '',
+    Address: '',
+    Phone: ''
   };
 
   constructor(private authService: AuthService, private router: Router) {}

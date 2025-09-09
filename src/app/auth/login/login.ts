@@ -7,19 +7,19 @@ import { SocialAuthService, GoogleLoginProvider } from '@abacritt/angularx-socia
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login {
- email = '';
+  email = '';
   password = '';
   token: string | null = null;
   showPassword;
   user: any;
-
-  constructor(private authService: AuthService, private router: Router,private socialAuthService: SocialAuthService) {
-     (window as any).handleCredentialResponse = (response: any) => {
+// private socialAuthService: SocialAuthService
+  constructor(private authService: AuthService, private router: Router, ) {
+    (window as any).handleCredentialResponse = (response: any) => {
       this.decodeJWT(response.credential);
     };
   }
@@ -53,12 +53,12 @@ export class Login {
   }
 
   loginWithGoogle() {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(googleUser => {
-    this.authService.loginWithGoogle(googleUser).subscribe(res => {
-      localStorage.setItem('authToken', res.token);
-      alert('Login success!');
-    });
-  });
+    // this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(googleUser => {
+    //   this.authService.loginWithGoogle(googleUser).subscribe(res => {
+    //     localStorage.setItem('authToken', res.token);
+    //     alert('Login success!');
+    //   });
+    // });
   }
 
 }

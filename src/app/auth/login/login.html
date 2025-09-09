@@ -22,20 +22,7 @@
       </button>
     </div>
 
-     <div class="container mt-5">
-      <h2>Login with Google</h2>
-      <div id="g_id_onload"
-           data-client_id="304753457158-e6gg6gn4c5kua773fihgm4ad7a8v256v.apps.googleusercontent.com"
-           data-callback="handleCredentialResponse">
-      </div>
-      <div class="g_id_signin" data-type="standard"></div>
-
-      <div *ngIf="user">
-        <h3>Welcome {{ user.name }}</h3>
-        <p>Email: {{ user.email }}</p>
-        <img [src]="user.picture" alt="Photo">
-      </div>
-    </div>
+   
 
     <div class="text-center">
       <small>
