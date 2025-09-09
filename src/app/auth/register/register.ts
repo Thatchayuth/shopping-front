@@ -60,13 +60,15 @@ export class Register {
       return;
     }
 
-    this.authService.register(this.email, this.password).subscribe({
-      next: () => {
-        alert('Register success! Please login.');
-        this.router.navigate(['/login']);
-      },
-      error: (err) => alert(err.error.message || 'Register failed'),
-    });
+    console.log(this.UsersRegistered);
+
+    // this.authService.register(this.email, this.password).subscribe({
+    //   next: () => {
+    //     alert('Register success! Please login.');
+    //     this.router.navigate(['/login']);
+    //   },
+    //   error: (err) => alert(err.error.message || 'Register failed'),
+    // });
   }
 
    checkPassword() {
@@ -80,6 +82,6 @@ export class Register {
 
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
-    
+
   }
 }

@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { Router, RouterModule } from '@angular/router';
-import { SocialAuthService, GoogleLoginProvider } from '@abacritt/angularx-social-login';
-
+import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
 @Component({
   selector: 'app-login',
   imports: [CommonModule, FormsModule, RouterModule],
@@ -17,11 +16,8 @@ export class Login {
   token: string | null = null;
   showPassword;
   user: any;
-// private socialAuthService: SocialAuthService
-  constructor(private authService: AuthService, private router: Router, ) {
-    (window as any).handleCredentialResponse = (response: any) => {
-      this.decodeJWT(response.credential);
-    };
+
+  constructor(private authService: AuthService, private router: Router,private socialAuthService: SocialAuthService) {
   }
 
   decodeJWT(token: string) {
@@ -53,12 +49,21 @@ export class Login {
   }
 
   loginWithGoogle() {
-    // this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(googleUser => {
-    //   this.authService.loginWithGoogle(googleUser).subscribe(res => {
-    //     localStorage.setItem('authToken', res.token);
-    //     alert('Login success!');
-    //   });
-    // });
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(googleUser => {
+      this.authService.loginWithGoogle(googleUser).subscribe(res => {
+        localStorage.setItem('authToken', res.token);
+        alert('Login success!');
+      });
+    });
+  }
+
+  loginWithFacebook() {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
+      console.log('Facebook login successful:', user);
+      // ส่ง token ไป backend ตรวจสอบ/สร้าง JWT ต่อ
+    }).catch(error => {
+      console.error('Facebook login failed:', error);
+    });
   }
 
 }
