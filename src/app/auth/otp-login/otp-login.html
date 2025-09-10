@@ -1,0 +1,9 @@
+ <h2>Login with Phone</h2>
+    <input placeholder="Phone" [(ngModel)]="phone">
+    <div id="recaptcha-container"></div>
+    <button (click)="sendOtp()">Send OTP</button>
+
+    <div>
+      <input placeholder="Enter OTP" [(ngModel)]="otp">
+      <button (click)="verifyOtp()">Verify OTP</button>
+    </div>

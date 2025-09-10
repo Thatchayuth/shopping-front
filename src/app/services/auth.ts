@@ -23,6 +23,10 @@ export class AuthService {
       { email: googleUser.email, name: googleUser.name, sub: googleUser.id, picture: googleUser.photoUrl });
   }
 
+  loginfirebase(token: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verify-otpfirebase`, { token });
+  }
+
   test() {
     return this.http.get('http://localhost:3000/auth');
   }
