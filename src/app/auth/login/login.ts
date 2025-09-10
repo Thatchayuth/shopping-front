@@ -17,7 +17,7 @@ export class Login {
   showPassword;
   user: any;
 
-  constructor(private authService: AuthService, private router: Router,private socialAuthService: SocialAuthService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   decodeJWT(token: string) {
@@ -49,21 +49,53 @@ export class Login {
   }
 
   loginWithGoogle() {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(googleUser => {
-      this.authService.loginWithGoogle(googleUser).subscribe(res => {
-        localStorage.setItem('authToken', res.token);
-        alert('Login success!');
-      });
-    });
+    const popup = window.open(
+      'http://localhost:3000/auth/google',
+      'Login with Google',
+      'width=500,height=600'
+    );
+
+    const timer = setInterval(() => {
+      if (popup?.closed) {
+        debugger
+        clearInterval(timer);
+        const user: any = localStorage.getItem('user');
+        if (user) {
+          console.log('Logged in user:', JSON.parse(user));
+          const parsedUser = JSON.parse(user);
+          if (parsedUser.address.address_detail)
+            this.router.navigate(['/dashboard']);
+          else
+            this.router.navigate(['/register'], { queryParams: { user: encodeURIComponent(user) } });
+
+        }
+      }
+    }, 500);
   }
 
   loginWithFacebook() {
-    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
-      console.log('Facebook login successful:', user);
-      // ส่ง token ไป backend ตรวจสอบ/สร้าง JWT ต่อ
-    }).catch(error => {
-      console.error('Facebook login failed:', error);
-    });
+    const popup = window.open(
+      'http://localhost:3000/auth/facebook',
+      'facebookLogin',
+      'width=500,height=600'
+    );
+
+    const timer = setInterval(() => {
+      if (popup?.closed) {
+        debugger
+        clearInterval(timer);
+        const user: any = localStorage.getItem('user');
+        if (user) {
+          console.log('Logged in user:', JSON.parse(user));
+          const parsedUser = JSON.parse(user);
+          if (parsedUser.address.address_detail)
+            this.router.navigate(['/dashboard']);
+          else
+            this.router.navigate(['/register'], { queryParams: { user: encodeURIComponent(user) } });
+
+        }
+      }
+    }, 500);
   }
 
 }
