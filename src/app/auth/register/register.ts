@@ -41,7 +41,19 @@ export class Register {
     Phone: ''
   };
 
+
+
   constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    const Socialuser: any = localStorage.getItem('user');
+    if (Socialuser) {
+      this.UsersRegistered.email = JSON.parse(Socialuser).email;
+      this.UsersRegistered.Username = JSON.parse(Socialuser).UserName;
+      this.UsersRegistered.LastName = JSON.parse(Socialuser).LastName;
+    } 
+    
+  }
 
   validateEmail(email: string): boolean {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
