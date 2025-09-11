@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SocialUser } from '@abacritt/angularx-social-login';
 
 export  interface User {
   email: string;
@@ -11,6 +12,8 @@ export  interface User {
   LastName: string;
   Address: string;
   Phone: string;
+  Social : boolean;
+  id : number;
 }
 @Component({
   selector: 'app-register',
@@ -38,7 +41,9 @@ export class Register {
     Username: '',
     LastName: '',
     Address: '',
-    Phone: ''
+    Phone: '',
+    Social : false,
+    id : 0
   };
 
 
@@ -51,8 +56,10 @@ export class Register {
       this.UsersRegistered.email = JSON.parse(Socialuser).email;
       this.UsersRegistered.Username = JSON.parse(Socialuser).UserName;
       this.UsersRegistered.LastName = JSON.parse(Socialuser).LastName;
-    } 
-    
+      this.UsersRegistered.Social = true;
+      this.UsersRegistered.id = JSON.parse(Socialuser).id;
+    }
+
   }
 
   validateEmail(email: string): boolean {
@@ -61,7 +68,7 @@ export class Register {
   }
 
   register() {
-    if (!this.validateEmail(this.email)) {
+    if (!this.validateEmail(this.UsersRegistered.email)) {
       alert('Invalid email format');
       return;
     }
@@ -72,15 +79,23 @@ export class Register {
       return;
     }
 
+    if (this.password !== this.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
     console.log(this.UsersRegistered);
 
-    // this.authService.register(this.email, this.password).subscribe({
-    //   next: () => {
-    //     alert('Register success! Please login.');
-    //     this.router.navigate(['/login']);
-    //   },
-    //   error: (err) => alert(err.error.message || 'Register failed'),
-    // });
+    this.UsersRegistered.password = this.password;
+
+
+    this.authService.register(this.UsersRegistered).subscribe({
+      next: () => {
+        alert('Register success! Please login.');
+        // this.router.navigate(['/login']);
+      },
+      error: (err) => alert(err.error.message || 'Register failed'),
+    });
   }
 
    checkPassword() {
