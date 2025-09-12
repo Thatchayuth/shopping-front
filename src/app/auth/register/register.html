@@ -9,15 +9,11 @@
       <input [(ngModel)]="UsersRegistered.LastName" type="text" class="form-control" placeholder="Last Name">
     </div>
     <div class="mb-3">
-      <textarea [(ngModel)]="UsersRegistered.Address" class="form-control" placeholder="Address"></textarea>
-    </div>
-    <div class="mb-3">
       <input [(ngModel)]="UsersRegistered.Phone" type="text" class="form-control" placeholder="Phone Number">
     </div>
     <div class="mb-3">
       <input [(ngModel)]="UsersRegistered.email" type="email" class="form-control" placeholder="Email">
     </div>
-
     <div class="mb-3 position-relative">
       <input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" class="form-control"
         placeholder="Password" (input)="checkPassword()">
@@ -31,6 +27,25 @@
       <input [(ngModel)]="confirmPassword" [type]="showPassword ? 'text' : 'password'" class="form-control"
         placeholder="Confirm Password">
     </div>
+
+
+    <div class="mb-3">
+      <textarea [(ngModel)]="UsersRegistered.Address" class="form-control" placeholder="Address"></textarea>
+    </div>
+    <div class="mb-3 position-relative">
+      <input type="text" class="form-control" placeholder="Province" [(ngModel)]="searchText" (input)="onSearch()"
+        (keydown)="onKeyDown($event)" (blur)="closeDropdown()" (focus)="onSearch()">
+
+      <ul class="list-group position-absolute w-100" *ngIf="filteredItems.length > 0" style="z-index: 1000;">
+        <li class="list-group-item list-group-item-action" *ngFor="let item of filteredItems; let i = index"
+          [class.active]="i === activeIndex" (mousedown)="selectItem(item)">
+          {{ item }}
+        </li>
+      </ul>
+    </div>
+
+
+
 
     <!-- Password Validation -->
     <ul class="mb-3 small">

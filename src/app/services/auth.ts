@@ -28,6 +28,18 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/verify-otpfirebase`, { token });
   }
 
+  getProvince(){
+    return this.http.get(`${this.apiUrl}/province`);
+  }
+
+  getDistrict(provinceId: number){
+    return this.http.get(`${this.apiUrl}/district/${provinceId}`);
+  }
+
+  getsubDistrict(districtId: number){
+    return this.http.get(`${this.apiUrl}/subdistrict/${districtId}`);
+  }
+
   test() {
     return this.http.get('http://localhost:3000/auth');
   }

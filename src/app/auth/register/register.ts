@@ -5,19 +5,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SocialUser } from '@abacritt/angularx-social-login';
 
-export  interface User {
+export interface User {
   email: string;
   password: string;
   Username: string;
   LastName: string;
   Address: string;
   Phone: string;
-  Social : boolean;
-  id : number;
+  Social: boolean;
+  id: number;
 }
 @Component({
   selector: 'app-register',
-  imports: [CommonModule,FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -35,20 +35,20 @@ export class Register {
     length: false
   };
 
-  UsersRegistered : User = {
+  UsersRegistered: User = {
     email: '',
     password: '',
     Username: '',
     LastName: '',
     Address: '',
     Phone: '',
-    Social : false,
-    id : 0
+    Social: false,
+    id: 0
   };
 
 
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     const Socialuser: any = localStorage.getItem('user');
@@ -98,7 +98,7 @@ export class Register {
     });
   }
 
-   checkPassword() {
+  checkPassword() {
     const pwd = this.password;
     this.passwordValidation.upper = /[A-Z]/.test(pwd);
     this.passwordValidation.lower = /[a-z]/.test(pwd);
@@ -110,5 +110,42 @@ export class Register {
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
 
+  }
+
+items: string[] = ['Apple', 'Banana', 'Cherry', 'Durian', 'Grape', 'Mango'];
+  filteredItems: string[] = [];
+  searchText: string = '';
+  activeIndex: number = -1;
+
+  onSearch() {
+    const term = this.searchText.toLowerCase();
+    this.filteredItems = this.items.filter(item => item.toLowerCase().includes(term));
+    this.activeIndex = -1;
+  }
+
+  selectItem(item: string) {
+    this.searchText = item;
+    this.filteredItems = [];
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (!this.filteredItems.length) return;
+
+    if (event.key === 'ArrowDown') {
+      this.activeIndex = (this.activeIndex + 1) % this.filteredItems.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.activeIndex = (this.activeIndex - 1 + this.filteredItems.length) % this.filteredItems.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter') {
+      if (this.activeIndex >= 0) {
+        this.selectItem(this.filteredItems[this.activeIndex]);
+      }
+      event.preventDefault();
+    }
+  }
+
+  closeDropdown() {
+    setTimeout(() => { this.filteredItems = []; }, 150); // delay เพื่อให้ click ยังทำงาน
   }
 }
