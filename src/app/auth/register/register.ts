@@ -60,6 +60,7 @@ export class Register {
       this.UsersRegistered.id = JSON.parse(Socialuser).id;
     }
 
+    this.GetProvince();
   }
 
   validateEmail(email: string): boolean {
@@ -112,10 +113,18 @@ export class Register {
 
   }
 
-items: string[] = ['Apple', 'Banana', 'Cherry', 'Durian', 'Grape', 'Mango'];
+items: any;
   filteredItems: string[] = [];
   searchText: string = '';
   activeIndex: number = -1;
+
+  GetProvince(){
+    this.authService.getProvince().subscribe((data: any) => {
+         console.log(data);
+     /// this.items = data.provinces;
+
+    });
+  }
 
   onSearch() {
     const term = this.searchText.toLowerCase();
