@@ -1,73 +1,118 @@
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-  <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow-lg p-4 w-100" style="max-width: 700px;">
     <h2 class="text-center mb-4 text-danger">Register</h2>
 
-    <div class="mb-3">
-      <input [(ngModel)]="UsersRegistered.Username" type="text" class="form-control" placeholder="First Name">
-    </div>
-    <div class="mb-3">
-      <input [(ngModel)]="UsersRegistered.LastName" type="text" class="form-control" placeholder="Last Name">
-    </div>
-    <div class="mb-3">
-      <input [(ngModel)]="UsersRegistered.Phone" type="text" class="form-control" placeholder="Phone Number">
-    </div>
-    <div class="mb-3">
-      <input [(ngModel)]="UsersRegistered.email" type="email" class="form-control" placeholder="Email">
-    </div>
-    <div class="mb-3 position-relative">
-      <input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" class="form-control"
-        placeholder="Password" (input)="checkPassword()">
-      <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-1 me-1"
-        (click)="showPassword = !showPassword">
-        <i class="fa-solid " [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-      </button>
+    <!-- Personal Info -->
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-6">
+        <input [(ngModel)]="UsersRegistered.Username" type="text" class="form-control" placeholder="First Name">
+      </div>
+      <div class="col-12 col-md-6">
+        <input [(ngModel)]="UsersRegistered.LastName" type="text" class="form-control" placeholder="Last Name">
+      </div>
     </div>
 
-    <div class="mb-3 position-relative">
-      <input [(ngModel)]="confirmPassword" [type]="showPassword ? 'text' : 'password'" class="form-control"
-        placeholder="Confirm Password">
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-6">
+        <input [(ngModel)]="UsersRegistered.Phone" type="text" class="form-control" placeholder="Phone Number">
+      </div>
+      <div class="col-12 col-md-6">
+        <input [(ngModel)]="UsersRegistered.email" type="email" class="form-control" placeholder="Email">
+      </div>
     </div>
 
-
-    <div class="mb-3">
-      <textarea [(ngModel)]="UsersRegistered.Address" class="form-control" placeholder="Address"></textarea>
+    <!-- Password -->
+    <div class="row g-3 mb-2">
+      <div class="col-12 col-md-6 position-relative">
+        <input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'"
+               class="form-control" placeholder="Password" (input)="checkPassword()">
+        <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-1 me-2"
+          (click)="showPassword = !showPassword">
+          <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+        </button>
+      </div>
+      <div class="col-12 col-md-6">
+        <input [(ngModel)]="confirmPassword" [type]="showPassword ? 'text' : 'password'"
+               class="form-control" placeholder="Confirm Password">
+      </div>
     </div>
-    <div class="mb-3 position-relative">
-      <input type="text" class="form-control" placeholder="Province" [(ngModel)]="searchText" (input)="onSearch()"
-        (keydown)="onKeyDown($event)" (blur)="closeDropdown()" (focus)="onSearch()">
 
-      <ul class="list-group position-absolute w-100" *ngIf="filteredItems.length > 0" style="z-index: 1000;">
-        <li class="list-group-item list-group-item-action" *ngFor="let item of filteredItems; let i = index"
-          [class.active]="i === activeIndex" (mousedown)="selectItem(item)">
-          {{ item }}
-        </li>
-      </ul>
+    <!-- Password Strength Bar -->
+    <div class="progress mb-3" style="height: 8px;">
+      <div class="progress-bar"
+           role="progressbar"
+           [style.width.%]="passwordStrength"
+           [ngClass]="{
+             'bg-danger': passwordStrength < 40,
+             'bg-warning': passwordStrength >= 40 && passwordStrength < 80,
+             'bg-success': passwordStrength >= 80
+           }">
+      </div>
     </div>
-
-
-
+    <p class="small text-muted mb-3">
+      Strength:
+      <span [ngClass]="{
+        'text-danger': passwordStrength < 40,
+        'text-warning': passwordStrength >= 40 && passwordStrength < 80,
+        'text-success': passwordStrength >= 80
+      }">
+        {{ passwordStrengthText }}
+      </span>
+    </p>
 
     <!-- Password Validation -->
-    <ul class="mb-3 small">
-      <li [class.text-success]="passwordValidation.upper" [class.text-danger]="!passwordValidation.upper">Uppercase
-        letter (A-Z)</li>
-      <li [class.text-success]="passwordValidation.lower" [class.text-danger]="!passwordValidation.lower">Lowercase
-        letter (a-z)</li>
-      <li [class.text-success]="passwordValidation.number" [class.text-danger]="!passwordValidation.number">Number (0-9)
-      </li>
-      <li [class.text-success]="passwordValidation.special" [class.text-danger]="!passwordValidation.special">Special
-        character (!@#$%^&*)</li>
-      <li [class.text-success]="passwordValidation.length" [class.text-danger]="!passwordValidation.length">At least 6
-        characters</li>
+    <ul class="mb-3 small ps-3">
+      <li [class.text-success]="passwordValidation.upper" [class.text-danger]="!passwordValidation.upper">Uppercase (A-Z)</li>
+      <li [class.text-success]="passwordValidation.lower" [class.text-danger]="!passwordValidation.lower">Lowercase (a-z)</li>
+      <li [class.text-success]="passwordValidation.number" [class.text-danger]="!passwordValidation.number">Number (0-9)</li>
+      <li [class.text-success]="passwordValidation.special" [class.text-danger]="!passwordValidation.special">Special (!@#$%^&*)</li>
+      <li [class.text-success]="passwordValidation.length" [class.text-danger]="!passwordValidation.length">At least 6 characters</li>
     </ul>
 
-    <button (click)="register()" class="btn btn-danger w-100 mb-3"><i
-        class="fas fa-user-plus me-2"></i>Register</button>
+    <!-- Address -->
+    <div class="mb-3">
+      <textarea [(ngModel)]="Address.address_detail" class="form-control" placeholder="Address"></textarea>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-4">
+        <select class="form-select" (change)="GetDistrict($event)">
+          <option [value]="0" disabled selected>Select Province</option>
+          @for (item of provinces; track $index) {
+            <option [value]="item.Id">{{ item.NameInThai }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <select class="form-select" (change)="GetSubdistrict($event)">
+          <option [value]="0" disabled selected>Select District</option>
+          @for (item of Districts; track $index) {
+            <option [value]="item.id">{{ item.nameInThai }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <select class="form-select" (change)="GetZipCode($event)">
+          <option [value]="0" disabled selected>Select Subdistrict</option>
+          @for (item of Subdistricts; track $index) {
+            <option [value]="item.id">{{ item.nameInThai }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Zipcode" [(ngModel)]="Address.postal_code" readonly>
+    </div>
+
+    <!-- Submit -->
+    <button (click)="register()" class="btn btn-danger w-100 mb-3">
+      <i class="fas fa-user-plus me-2"></i>Register
+    </button>
 
     <div class="text-center">
       <small>
-        Already have an account?
-        <a routerLink="/login">Login</a>
+        Already have an account? <a routerLink="/login">Login</a>
       </small>
     </div>
   </div>

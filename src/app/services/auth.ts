@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../auth/register/register';
+import { User, Address } from '../auth/register/register';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  register(userDetails : any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, {userDetails });
+  register(userDetails : any,Address : any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, {userDetails, Address });
   }
 
   login(email: string, password: string): Observable<any> {
@@ -33,11 +33,11 @@ export class AuthService {
   }
 
   getDistrict(provinceId: number){
-    return this.http.get(`${this.apiUrl}/district/${provinceId}`);
+    return this.http.get(`${this.apiUrl}/district?ProvinceId=${provinceId}`);
   }
 
   getsubDistrict(districtId: number){
-    return this.http.get(`${this.apiUrl}/subdistrict/${districtId}`);
+    return this.http.get(`${this.apiUrl}/subdistrict?DistrictId=${districtId}`);
   }
 
   test() {

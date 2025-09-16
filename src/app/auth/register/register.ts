@@ -15,6 +15,15 @@ export interface User {
   Social: boolean;
   id: number;
 }
+
+export interface Address {
+  address_detail: string;
+  sub_district: number;
+  district: number;
+  province: number;
+  postal_code: string;
+  phone: string;
+}
 @Component({
   selector: 'app-register',
   imports: [CommonModule, FormsModule, RouterModule],
@@ -26,6 +35,8 @@ export class Register {
   password = '';
   confirmPassword = '';
   showPassword = false;
+  passwordStrength: number = 0;
+passwordStrengthText: string = 'Weak';
 
   passwordValidation = {
     upper: false,
@@ -46,6 +57,18 @@ export class Register {
     id: 0
   };
 
+  Address: Address = {
+    address_detail: '',
+    sub_district: 0,
+    district: 0,
+    province: 0,
+    postal_code: '',
+    phone: ''
+  };
+
+  provinces: any;
+  Districts: any;
+  Subdistricts: any;
 
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -90,7 +113,7 @@ export class Register {
     this.UsersRegistered.password = this.password;
 
 
-    this.authService.register(this.UsersRegistered).subscribe({
+    this.authService.register(this.UsersRegistered,this.Address).subscribe({
       next: () => {
         alert('Register success! Please login.');
         // this.router.navigate(['/login']);
@@ -106,6 +129,21 @@ export class Register {
     this.passwordValidation.number = /[0-9]/.test(pwd);
     this.passwordValidation.special = /[!@#$%^&*]/.test(pwd);
     this.passwordValidation.length = pwd.length >= 6;
+
+    let score = 0;
+  Object.values(this.passwordValidation).forEach(valid => {
+    if (valid) score += 20;
+  });
+
+  this.passwordStrength = score;
+
+  if (score < 40) {
+    this.passwordStrengthText = 'Weak';
+  } else if (score < 80) {
+    this.passwordStrengthText = 'Medium';
+  } else {
+    this.passwordStrengthText = 'Strong';
+  }
   }
 
   toggleShowPassword() {
@@ -113,48 +151,40 @@ export class Register {
 
   }
 
-items: any;
-  filteredItems: string[] = [];
-  searchText: string = '';
-  activeIndex: number = -1;
 
-  GetProvince(){
+  GetProvince() {
     this.authService.getProvince().subscribe((data: any) => {
-         console.log(data);
-     /// this.items = data.provinces;
+      console.log(data);
+      this.provinces = data;
 
     });
   }
 
-  onSearch() {
-    const term = this.searchText.toLowerCase();
-    this.filteredItems = this.items.filter(item => item.toLowerCase().includes(term));
-    this.activeIndex = -1;
+  GetDistrict(event) {
+    const provinceId = event.target.value;
+    this.Address.province = provinceId;
+    this.authService.getDistrict(provinceId).subscribe((data: any) => {
+      console.log(data);
+      this.Districts = data;
+    });
   }
 
-  selectItem(item: string) {
-    this.searchText = item;
-    this.filteredItems = [];
+  GetSubdistrict(event) {
+    const districtId = event.target.value;
+    this.Address.district = districtId;
+    console.log(districtId);
+    this.authService.getsubDistrict(districtId).subscribe((data: any) => {
+      console.log(data);
+      this.Subdistricts = data;
+    });
   }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (!this.filteredItems.length) return;
+  GetZipCode(event) {
+    const subDistrictId = event.target.value;
+    this.Address.sub_district = subDistrictId;
+    const selectedSubDistrict = this.Subdistricts.find((sub: any) => sub.id == subDistrictId);
+    this.Address.postal_code = selectedSubDistrict ? selectedSubDistrict.ZipCode : '';
+    console.log(selectedSubDistrict);
 
-    if (event.key === 'ArrowDown') {
-      this.activeIndex = (this.activeIndex + 1) % this.filteredItems.length;
-      event.preventDefault();
-    } else if (event.key === 'ArrowUp') {
-      this.activeIndex = (this.activeIndex - 1 + this.filteredItems.length) % this.filteredItems.length;
-      event.preventDefault();
-    } else if (event.key === 'Enter') {
-      if (this.activeIndex >= 0) {
-        this.selectItem(this.filteredItems[this.activeIndex]);
-      }
-      event.preventDefault();
-    }
-  }
-
-  closeDropdown() {
-    setTimeout(() => { this.filteredItems = []; }, 150); // delay เพื่อให้ click ยังทำงาน
   }
 }
