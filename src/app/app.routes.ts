@@ -6,10 +6,11 @@ import { LoginSuccessComponent } from './auth/login/login-success.component';
 import { DashboardMain } from './dashboard/dashboard-main/dashboard-main';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: Login },
-    { path: 'register', component: Register},
-    { path: 'otpfirebase', component: OtpLogin},
-    { path: 'login-success', component: LoginSuccessComponent},
-    { path: 'dashboard', component: DashboardMain},
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: Login },
+  { path: 'register', component: Register },
+  { path: 'otpfirebase', component: OtpLogin },
+  { path: 'login-success', component: LoginSuccessComponent },
+  { path: 'dashboard', component: DashboardMain },
+  { path: 'seller-product', loadComponent: () => import('./Product/seller-products/seller-products').then(m => m.SellerProducts) }
 ];

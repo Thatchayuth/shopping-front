@@ -1,0 +1,106 @@
+<div class="container py-4">
+  <!-- Header -->
+  <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-4 gap-3">
+    <div>
+      <h1 class="h4 fw-bold mb-1">แดชบอร์ดผู้ขาย</h1>
+      <p class="text-muted small">จัดการสินค้าของคุณ ดูสถิติ และตอบคำสั่งซื้อ</p>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <div class="position-relative">
+        <input [(ngModel)]="query" class="form-control ps-5" style="width: 260px"
+          placeholder="ค้นหาสินค้า, คำอธิบาย..." />
+        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+      </div>
+
+      <button class="btn btn-primary d-flex align-items-center gap-2" (click)="openNew()">
+        <i class="bi bi-plus-lg"></i> เพิ่มสินค้า
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div *ngIf="loading" class="text-center py-5 text-muted">กำลังโหลด...</div>
+
+  <div class="row g-4">
+    <ng-container *ngFor="let p of filtered()">
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px">
+            <img *ngIf="p.image_url; else placeholder" [src]="p.image_url" alt="product"
+              class="img-fluid h-100 object-fit-contain" />
+            <ng-template #placeholder>
+              <span class="text-muted small">ไม่มีรูปภาพ</span>
+            </ng-template>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex justify-content-between mb-2">
+              <div>
+                <h5 class="card-title mb-1">{{ p.name }}</h5>
+                <p class="card-text small text-muted">{{ p.description }}</p>
+              </div>
+              <div class="text-end">
+                <div class="fw-bold text-primary">{{ p.price | number:'1.2-2' }} ฿</div>
+                <small class="text-muted">สต็อก: {{ p.stock }}</small>
+              </div>
+            </div>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-warning" (click)="openEdit(p)">แก้ไข</button>
+                <button class="btn btn-sm btn-outline-danger" (click)="remove(p.id)">ลบ</button>
+              </div>
+              <small class="text-muted">ID: {{ p.id }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && filtered.length === 0" class="text-center py-5 text-muted">
+    ยังไม่มีสินค้าในระบบ — กด <span class="fw-semibold">เพิ่มสินค้า</span> เพื่อเริ่มขาย
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true" #productModal>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <form (ngSubmit)="save()" [formGroup]="productForm">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editing ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่' }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label class="form-label">ชื่อสินค้า</label>
+              <input formControlName="name" class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">ราคา (฿)</label>
+              <input type="number" formControlName="price" class="form-control" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">คำอธิบาย</label>
+              <textarea formControlName="description" rows="3" class="form-control"></textarea>
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">สต็อก</label>
+              <input type="number" formControlName="stock" class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">URL รูปภาพ</label>
+              <input formControlName="imageUrl" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="submit" class="btn btn-primary">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
