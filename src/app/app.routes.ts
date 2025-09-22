@@ -4,6 +4,7 @@ import { Register } from './auth/register/register';
 import { OtpLogin } from './auth/otp-login/otp-login';
 import { LoginSuccessComponent } from './auth/login/login-success.component';
 import { DashboardMain } from './dashboard/dashboard-main/dashboard-main';
+import { Payment } from './payment/payment';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'otpfirebase', component: OtpLogin },
   { path: 'login-success', component: LoginSuccessComponent },
   { path: 'dashboard', component: DashboardMain },
+  { path: 'payment', component : Payment},
   { path: 'seller-product', loadComponent: () => import('./Product/seller-products/seller-products').then(m => m.SellerProducts) }
 ];
